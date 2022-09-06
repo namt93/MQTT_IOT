@@ -7,7 +7,7 @@ from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.stacklayout import StackLayout
 from kivy.graphics.context_instructions import Color
-from kivy.graphics.vertex_instructions import Line, Rectangle
+from kivy.graphics.vertex_instructions import Line, Rectangle, Ellipse
 from kivy.uix.widget import Widget
 
 
@@ -103,8 +103,23 @@ class CanvasExample4(Widget):
     
     def on_button_a_click(self):
         x, y = self.rect.pos
-        x += dp(10)
+        w, h = self.rect.size
+        inc = dp(10)
+        diff = self.width - (x+w)
+        if self.width - (x+w) < inc:
+            inc = diff
+
+        x += inc
         self.rect.pos = (x, y)
         
+class CanvasExample5(Widget):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.ball_size = dp(50)
+        with self.canvas:
+            self.ball = Ellipse(pos=self.center, size=(self.ball_size,self.ball_size))
+
+    def on_size(self, *args):
+        self.ball.pos = (self.center_x-self.ball_size/2, self.center_y-self.ball_size/2)
 
 TheLabApp().run()
